@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load repositories i18n %}
+
+{% block title %}
+    {{ repo.working_dir|repo_name }}
+{% endblock %}
+
+{% block page_title %}
+    {% trans "Repository" %} {{ repo.working_dir|repo_name }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <tr>
+            <th>{% trans "Commit" %}</th>
+            <th>{% trans "Message" %}</th>
+            <th>{% trans "Author" %}</th>
+            <th>{% trans "Date" %}</th>
+        </tr>
+        {% for commit in repo.iter_commits %}
+        <tr>
+            <td><a href="{% url 'git_admin_commit_details' repo.working_dir|repo_name commit %}">{{ commit|commit_short }}</a></td>
+            <td>{{ commit.summary }}</td>
+            <td>{{ commit.committer.name }}</td>
+            <td>{{ commit.committed_date|seconds_to_date|date:"m/d/Y" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    {% if repo.heads %}
+        <h3>{% trans "Heads" %}</h3>
+        <ul>
+            {% for head in repo.heads %}
+            <li>{{ head.name }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

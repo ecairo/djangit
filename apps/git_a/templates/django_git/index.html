@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load repositories i18n %}
+
+{% block title %}
+    {% trans "Repositories" %}
+{% endblock %}
+
+{% block page_title %}
+    {% trans "Repositories" %}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <tr>
+            <th>{% trans "Repository" %} </th>
+            <th>{% trans "Last Commit" %}</th>
+            <th>{% trans "Last Commit Author" %}</th>
+            <th>{% trans "Date" %}</th>
+        </tr>
+        {% for repo in repos %}
+        <tr>
+            <td><a href="{% url 'git_admin_repository' repo.working_tree_dir|repo_name %}">{{ repo.working_tree_dir|repo_name }}</a></td>
+            <td>{{ repo.commit.summary }}</td>
+            <td>{{ repo.commit.author.name }}</td>
+            <td>{{ repo.commit.committed_date|seconds_to_date|timesince }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

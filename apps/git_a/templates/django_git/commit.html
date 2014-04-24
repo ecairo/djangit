@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load repositories staticfiles i18n %}
+
+{% block title %}
+    {{ repo.working_dir|repo_name }} : {{ commit|commit_short }}
+{% endblock %}
+
+{% block page_title %}
+    {% trans "Commit" %} : {{ commit|commit_short }}
+{% endblock %}
+
+{% block content %}
+    <div class="row-fuild">
+        <div class="col-sm-4">
+            <p>{% trans "Author" %}: {{ commit.author }}</p>
+            <p>{% trans "Date" %}: {{ commit.committed_date|seconds_to_date|timesince }} ({{ commit.committed_date|seconds_to_date|date }})</p>
+            <p>{% trans "Files" %}:</p>
+            <ul>
+            {% for tree in commit.tree %}
+                <li>{{ tree.name }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <p>{{ commit.message }}</p>
+              </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
