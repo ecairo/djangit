@@ -3,17 +3,17 @@
 {% load repositories staticfiles i18n %}
 
 {% block title %}
-    {{ repo.working_dir|repo_name }} : {{ commit|commit_short }}
+    {{ repo.working_dir|repo_name }} : {{ commit|hex_sha_short }}
 {% endblock %}
 
 {% block page_title %}
-    {% trans "Commit" %} : {{ commit|commit_short }}
+    {% trans "Commit" %} : {{ commit|hex_sha_short }}
 {% endblock %}
 
 {% block content %}
     <div class="row-fuild">
         <div class="col-sm-4">
-            <p>{% trans "Author" %}: {{ commit.author }}</p>
+            <p>{% trans "Author" %}: {{ commit.author.name }}</p>
             <p>{% trans "Date" %}: {{ commit.committed_date|seconds_to_date|timesince }} ({{ commit.committed_date|seconds_to_date|date }})</p>
             <p>{% trans "Files" %}:</p>
             <ul>

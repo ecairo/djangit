@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load repositories i18n %}
+
+{% block title %}
+    {{ repo.working_dir|repo_name }}
+{% endblock %}
+
+{% block page_title %}
+    {% trans "Repository" %} {{ repo.working_dir|repo_name }}
+{% endblock %}
+
+{% block content %}
+
+    <section>
+    <table class="table">
+        <tr>
+            <th>{% trans "Clone URL" %}:</th><td></td>
+        </tr>
+        <tr>
+            <th>{% trans "Clone command" %}:</th><td></td>
+        </tr>
+    </table>
+    </section>
+
+    <section>
+        {% include 'git_a/commit_header.html' with commit=repo.head.reference.commit %}
+        <ul class="list-inline">
+            <li><span class="glyphicon glyphicon-list"></span> <a href="#">{% trans "View commit log" %}</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-random"></i>&nbsp;&nbsp;{{ repo.head }} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            {% for head in repo.heads %}
+            <li><a href="#">{{ head.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 30px">#</th>
+                    <th>{% trans "Name" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tree in repo.tree %}
+                    <tr>
+                        <td>{{ tree.size }}</td>
+                        <td><a href="#">{{ tree.name }}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

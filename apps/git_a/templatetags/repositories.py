@@ -9,8 +9,8 @@ register = template.Library()
 def repo_name(value):
     return value.split(os.sep)[-1]
 
-@register.filter("commit_short")
-def commit_short(value):
+@register.filter("hex_sha_short")
+def hex_sha_short(value):
     return "".join(list(str(value))[:8])
 
 @register.filter("seconds_to_date")

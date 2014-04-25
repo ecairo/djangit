@@ -1,1 +1,5 @@
 /*! project specific CSS goes here. */
+
+table.commit-metadata {
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+}
