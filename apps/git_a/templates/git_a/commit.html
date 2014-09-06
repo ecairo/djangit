@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load repositories staticfiles i18n %}
+{% load markup %}
 
 {% block title %}
     {{ repo.working_dir|repo_name }} : {{ commit|hex_sha_short }}
@@ -25,7 +26,7 @@
         <div class="col-sm-8">
             <div class="panel panel-default">
               <div class="panel-body">
-                <p>{{ commit.message }}</p>
+                <p>{{ commit.message|markdown:"safe" }}</p>
               </div>
             </div>
         </div>

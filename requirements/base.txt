@@ -2,3 +2,4 @@ Django==1.5.1
 South>=0.8.1
 GitPython
 pygments>=1.2.2
+Python-Markdown>=2.1

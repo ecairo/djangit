@@ -1,4 +1,5 @@
 {% load repositories staticfiles i18n %}
+{% load markup %}
 
 <script src="{% static 'js/vendor/holder.js' %}"></script>
 
@@ -8,7 +9,7 @@
             <img data-src="holder.js/72x72" alt="django-avatar profile image">
         </div>
         <div class="col-sm-7">
-            <strong>{{ commit.message }}</strong>
+            <p>{{ commit.message|markdown:"safe" }}</p>
             <p>{{ commit.committed_date|seconds_to_date|timesince }}</p>
         </div>
         <div class="col-sm-4">
@@ -29,7 +30,9 @@
                     <tr>
                         <td>{% trans "parent" %}: </td>
                         <td>
-                            <a href="{% url 'commit_details' repo_name=repo_name commit_hash=commit.parents.0.hexsha %}"> {{ commit.parents.0.hexsha|hex_sha_short }}</a>
+                            {% if commit.parents.0 %}
+                                <a href="{% url 'commit_details' repo_name=repo_name commit_hash=commit.parents.0.hexsha %}"> {{ commit.parents.0.hexsha|hex_sha_short }}</a>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
