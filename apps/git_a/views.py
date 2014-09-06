@@ -12,5 +12,6 @@ def repo_details(request, repo_name, template_name='git_a/repo.html'):
 
 
 def commit_details(request, repo_name, commit_hash, template_name='git_a/commit.html'):
-    return render_to_response(template_name, {'repo': get_repo(repo_name),
-                                              'commit': get_commit(repo_name, commit_hash)})
+    return render_to_response(template_name,
+                              {'repo': get_repo(repo_name),
+                               'commit': get_commit(repo_name, commit_hash)})
