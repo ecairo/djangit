@@ -17,19 +17,19 @@
                     <tr>
                         <td>{% trans "commit" %}: </td>
                         <td>
-                            <a href="{% url 'git_admin_commit_details' repo_name=repo.working_dir|repo_name commit_hash=commit.hexsha %}">{{ commit.hexsha|hex_sha_short }}</a>
+                            <a href="{% url 'commit_details' repo_name=repo_name commit_hash=commit.hexsha %}">{{ commit.hexsha|hex_sha_short }}</a>
                         </td>
                     </tr>
                     <tr>
                         <td>{% trans "tree" %}: </td>
                         <td>
-                            <a href="{{ commit.tree.hexsha }}">{{ commit.tree.hexsha|hex_sha_short }}</a>
+                            <a href="{% url 'repository_navigate' repo_name=repo_name tree_hash=commit.tree.hexsha%}">{{ commit.tree.hexsha|hex_sha_short }}</a>
                         </td>
                     </tr>
                     <tr>
                         <td>{% trans "parent" %}: </td>
                         <td>
-                            <a href="{% url 'git_admin_commit_details' repo_name=repo.working_dir|repo_name commit_hash=commit.parents.0.hexsha %}"> {{ commit.parents.0.hexsha|hex_sha_short }}</a>
+                            <a href="{% url 'commit_details' repo_name=repo_name commit_hash=commit.parents.0.hexsha %}"> {{ commit.parents.0.hexsha|hex_sha_short }}</a>
                         </td>
                     </tr>
                     <tr>

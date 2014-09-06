@@ -15,16 +15,18 @@
     <section>
     <table class="table">
         <tr>
-            <th>{% trans "Clone URL" %}:</th><td></td>
+            <th>{% trans "Clone URL" %}:</th>
+            <td></td>
         </tr>
         <tr>
-            <th>{% trans "Clone command" %}:</th><td></td>
+            <th>{% trans "Clone command" %}:</th>
+            <td></td>
         </tr>
     </table>
     </section>
 
     <section>
-        {% include 'git_a/commit_header.html' with commit=repo.head.reference.commit %}
+        {% include 'git_a/commit_header.html' with commit=repo.head.reference.commit repo_name=repo.working_dir|repo_name %}
         <ul class="list-inline">
             <li>
                 <div class="btn-group">
@@ -51,16 +53,17 @@
                 </tr>
             </thead>
             <tbody>
-                {% for tree in repo.tree %}
+                {% for tree in tree_index %}
                     <tr>
                         <td>{{ tree.size }}</td>
                         <td style="color: #808080">
                             {% if tree.type == 'blob' %}
                                 <span class="glyphicon glyphicon-file"></span>
+                                <a href="{% url 'object_details' repo_name=repo.working_dir|repo_name object_hash=tree.hexsha %}">{{ tree.name }}</a>
                             {% else %}
                                 <span class="glyphicon glyphicon-folder-close"></span>
+                                <a href="{% url 'repository_navigate' repo_name=repo.working_dir|repo_name tree_hash=tree.hexsha %}">{{ tree.name }}</a>
                             {% endif %}
-                            <a href="#">{{ tree.name }}</a>
                         </td>
                     </tr>
                 {% endfor %}
