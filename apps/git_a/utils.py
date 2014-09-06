@@ -1,4 +1,4 @@
-import os
+from os import listdir, path
 from git import *
 
 from django.http import Http404
@@ -6,15 +6,28 @@ from django.conf import settings
 
 
 def get_repos():
-    repos = [get_repo(dir) for dir in os.listdir(settings.REPOS_ROOT)]
+    repos = [list_repos(repo_dir) for repo_dir in listdir(settings.REPOS_ROOT)]
     return [r for r in repos if not (r is None)]
 
 
+def list_repos(name):
+    repo_path = path.join(settings.REPOS_ROOT, name)
+    if path.isdir(repo_path):
+        try:
+            return Repo(repo_path)
+        except InvalidGitRepositoryError:
+            return None
+    return None
+
+
 def get_repo(name):
-    repo_path = os.path.join(settings.REPOS_ROOT, name)
-    if not os.path.isdir(repo_path):
+    repo_path = path.join(settings.REPOS_ROOT, name)
+    try:
+        return Repo(repo_path)
+    except InvalidGitRepositoryError:
         raise Http404
-    return Repo(repo_path)
+    except NoSuchPathError:
+        raise Http404
 
 
 def get_repo_index(repo, tree_hash):

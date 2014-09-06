@@ -8,7 +8,8 @@ from apps.git_a.utils import *
 
 
 def repo_index(request):
-    return render_to_response('git_a/index.html', {'repos': get_repos()})
+    repos = get_repos()
+    return render_to_response('git_a/index.html', {'repos': repos})
 
 
 def repo_details(request, repo_name, tree_hash=None):
