@@ -42,4 +42,6 @@ def object_details(request, repo_name, object_hash):
     lexer = guess_lexer_for_filename(selected_object.name, raw_data)
     object_data = highlight(raw_data, lexer, HtmlFormatter())
     return render_to_response('git_a/object_details.html',
-                              {'object_data': object_data, 'repo': repo, })
+                              {'object_data': object_data,
+                               'selected_object': selected_object,
+                               'repo': repo, })

@@ -3,31 +3,23 @@
 {% load repositories staticfiles i18n %}
 
 {% block title %}
-    {# {{ repo.working_dir|repo_name }} : {{ commit|hex_sha_short }} #}
+    {{ repo.working_dir|repo_name }} : {{ selected_object.name }}
 {% endblock %}
 
 {% block page_title %}
-    {# {% trans "Commit" %} : {{ commit|hex_sha_short }} #}
+    {% trans "Repository" %} {{ repo.working_dir|repo_name }}
 {% endblock %}
 
  {% block extra_css %}
- <link rel="stylesheet" href="{% static 'css/pygments.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/pygments.css' %}" type="text/css" />
  {% endblock extra_css %}
 
-
 {% block content %}
+    <section>
+        {% trans "File" %}: <a href="#">{{ selected_object.name }}</a>
+    </section>
+
     <div class="row-fuild">
-        <div class="col-sm-4">
-            {# <p>{% trans "Author" %}: {{ commit.author.name }}</p> #}
-            {# <p>{% trans "Date" %}: {{ commit.committed_date|seconds_to_date|timesince }} ({{ commit.committed_date|seconds_to_date|date }})</p> #}
-        </div>
-        <div class="col-sm-8">
-            <div class="panel panel-default">
-              <div class="panel-body">
-                {# <p>{{ commit.message }}</p> #}
-              </div>
-            </div>
-        </div>
         <div class="col-sm-12">
             {{ object_data|safe }}
         </div>
