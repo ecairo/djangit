@@ -2,7 +2,7 @@ from os import walk, path
 from zipfile import ZipFile
 
 from pygments import highlight
-from pygments.lexers import guess_lexer_for_filename
+from pygments.lexers import guess_lexer_for_filename, DiffLexer
 from pygments.formatters import HtmlFormatter
 
 from django.http import HttpResponse
@@ -23,8 +23,17 @@ def repo_details(request, repo_name, tree_hash=None):
 
     tree_index = get_repo_index(repo, tree_hash)
 
+    diff_data = []
+    if repo.is_dirty():
+        modified_files = repo.git.diff_files('--name-only').split('\n')
+        for mfile in modified_files:
+            file_raw = repo.git.diff(mfile)
+            file_diff = highlight(file_raw, DiffLexer(), HtmlFormatter())
+            diff_data.append((mfile, file_diff))
+
     return render_to_response('git_a/repo.html', {
         'repo': repo,
+        'diff_data': diff_data,
         'tree_index': tree_index,
         'commits': repo.iter_commits('master')},
         context_instance=RequestContext(request))
@@ -51,7 +60,7 @@ def object_details(request, repo_name, object_hash):
     raw_data = selected_object.data_stream.read()
     lexer = guess_lexer_for_filename(selected_object.name, raw_data)
     object_data = highlight(raw_data, lexer, HtmlFormatter())
-    
+
     return render_to_response('git_a/object_details.html', {
         'object_data': object_data,
         'selected_object': selected_object,

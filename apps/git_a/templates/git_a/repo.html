@@ -1,55 +1,82 @@
 {% extends "base.html" %}
 
-{% load repositories i18n markup %}
+{% load repositories staticfiles i18n markup %}
 
 {% block title %}
     {{ repo.working_dir|repo_name }}
 {% endblock %}
 
 {% block page_title %}
-    {% trans "Repository" %}: {{ repo.working_dir|repo_name }} {% if repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
+    {% trans "Repository" %}: {{ repo.working_dir|repo_name }} <sup class="{% if repo.is_dirty %}text-danger {% else %}text-success{% endif %}"><i class="glyphicon glyphicon-ok-sign"></i></sup>
 {% endblock %}
 
+ {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pygments.css' %}" type="text/css" />
+ {% endblock extra_css %}
+
 {% block content %}
-    <div class="well">
-        <h3>{% trans "Status" %}:</h3>
-        <p>{{ repo.git.status|linebreaksbr }}</p>
+    {% if repo.is_dirty %}
+    <div class="alert alert-info fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4>{% trans "Uncommited Changes" %}:</h4>
+        <div class="panel-group" id="accordion">
+            {% for file_data in diff_data %}
+              <div class="panel panel-danger">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
+                      {{ file_data.0 }}
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    {{ file_data.1|safe }}
+                  </div>
+                </div>
+              </div>                
+            {% endfor %}
+        </div>
     </div>
+    {% endif %}
 
     <section>
-    <table class="table">
-        <tr>
-            <th>{% trans "Clone URL" %}:</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th>{% trans "Clone command" %}:</th>
-            <td></td>
-        </tr>
-    </table>
+        <table class="table table-condensed">
+            <tr>
+                <th>{% trans "Clone URL" %}:</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>{% trans "Clone command" %}:</th>
+                <td></td>
+            </tr>
+        </table>
     </section>
 
     <section class="repo_nav">
         <ul class="nav nav-pills" role="tablist">
-            <li class="active dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-random"></i>&nbsp;&nbsp;{{ repo.head }}  <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    {% for head in repo.heads %}
-                        <li><a href="#commits_log" role="tab" data-toggle="tab">{{ head.name }}</a></li>
-                    {% endfor %}
-                </ul>
+            <li class="active">
+                <a href="#tree_index" role="tab" data-toggle="tab">
+                    <i class="glyphicon glyphicon-list"></i> {% trans "File Tree" %}
+                </a>
+            </li>        
+            <li>
+                <a href="#commits_log" role="tab" data-toggle="tab">
+                    <i class="glyphicon glyphicon-random"></i> {% trans "Commits" %}</span>
+                </a>
+                {# TODO: Show commits by branch #}
+                {# <ul class="dropdown-menu" role="menu"> #}
+                    {# {% for head in repo.heads %} #}
+                        {# <li><a href="#commits_log" role="tab" data-toggle="tab">{{ head.name }}</a></li> #}
+                    {# {% endfor %} #}
+                {# </ul> #}
             </li>
-            <li><a href="#tree_index" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> {% trans "File Tree" %}</a></li>
+
         </ul>
     </section>
 
     <section class="tab-content">
-        <div class="tab-pane active" id="commits_log">
-            {% for commit_log in commits %}
-            {% include 'git_a/commit_header.html' with commit=commit_log repo_name=repo.working_dir|repo_name %}
-            {% endfor %}
-        </div>
-        <div class="tab-pane" id="tree_index">
+        <div class="tab-pane active" id="tree_index">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -74,6 +101,11 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+        <div class="tab-pane" id="commits_log">
+            {% for commit_log in commits %}
+            {% include 'git_a/commit_header.html' with commit=commit_log repo_name=repo.working_dir|repo_name %}
+            {% endfor %}
         </div>
     </section>
 {% endblock %}
