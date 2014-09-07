@@ -15,9 +15,11 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% if repo.is_dirty %}
     <div class="alert alert-info fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span>
+        </button>
+    {% if repo.is_dirty %}
         <h4>{% trans "Uncommited Changes" %}:</h4>
         <div class="panel-group" id="accordion">
             {% for file_data in diff_data %}
@@ -37,10 +39,11 @@
               </div>                
             {% endfor %}
         </div>
-    </div>
     {% else %}
+        <h4>{% trans "Last commit" %}:</h4>
         {% include 'git_a/commit_header.html' with commit=repo.head.commit repo_name=repo.working_dir|repo_name %}
     {% endif %}
+    </div>
 
     <section>
         <table class="table table-condensed">
