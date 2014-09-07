@@ -22,7 +22,11 @@
         </tr>
         {% for repo in repos %}
         <tr>
-            <td><a href="{% url 'repository_index' repo.working_tree_dir|repo_name %}">{{ repo.working_tree_dir|repo_name }}</a></td>
+            <td>
+                <a href="{% url 'repository_index' repo.working_tree_dir|repo_name %}">
+                    {{ repo.working_tree_dir|repo_name }}
+                </a> {% if repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
+            </td>
             <td>{{ repo.head.commit.summary }}</td>
             <td>{{ repo.head.commit.author.name }}</td>
             <td>{{ repo.head.commit.committed_date|seconds_to_date|timesince }}</td>

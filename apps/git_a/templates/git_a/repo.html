@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block page_title %}
-    {% trans "Repository" %} {{ repo.working_dir|repo_name }}
+    {% trans "Repository" %} {{ repo.working_dir|repo_name }} {% if repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -35,7 +35,7 @@
                     {% endfor %}
                 </ul>
             </li>
-            <li><a href="#commits_log" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> {% trans "View commit log" %}</a></li>
+            <li><a href="#commits_log" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> {% trans "Commit log" %}</a></li>
         </ul>
     </section>
 

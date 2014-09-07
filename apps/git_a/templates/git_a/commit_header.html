@@ -10,7 +10,7 @@
         </div>
         <div class="col-sm-7">
             <p>{{ commit.message|markdown:"safe" }}</p>
-            <p>{{ commit.committed_date|seconds_to_date|timesince }}</p>
+            <p class="text-muted">{{ commit.committed_date|seconds_to_date|timesince }}</p>
         </div>
         <div class="col-sm-4">
             <table class="commit-metadata">
