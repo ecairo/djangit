@@ -12,12 +12,13 @@
 
 {% block content %}
 
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped">
         <tr>
             <th>{% trans "Repository" %} </th>
             <th>{% trans "Last Commit" %}</th>
             <th>{% trans "Last Commit Author" %}</th>
             <th>{% trans "Date" %}</th>
+            <th></th>
         </tr>
         {% for repo in repos %}
         <tr>
@@ -25,6 +26,7 @@
             <td>{{ repo.head.commit.summary }}</td>
             <td>{{ repo.head.commit.author.name }}</td>
             <td>{{ repo.head.commit.committed_date|seconds_to_date|timesince }}</td>
+            <td><a href="{% url 'repository_archive' repo.working_tree_dir|repo_name %}"><span class="glyphicon glyphicon-cloud-download"></span></a></td>
         </tr>
         {% endfor %}
     </table>

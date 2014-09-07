@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 
 from pygments import highlight
@@ -5,6 +6,7 @@ from pygments.lexers import guess_lexer_for_filename
 from pygments.formatters import HtmlFormatter
 
 from apps.git_a.utils import *
+from conf.settings.base import MEDIA_ROOT
 
 
 def repo_index(request):
@@ -46,3 +48,14 @@ def object_details(request, repo_name, object_hash):
                               {'object_data': object_data,
                                'selected_object': selected_object,
                                'repo': repo, })
+
+
+def archive_repo(request, repo_name):
+    repo = get_repo(repo_name)
+    filename = "%s/%s.zip" % (MEDIA_ROOT, repo_name)
+
+    response = HttpResponse(repo.archive(open(filename, 'w+')),
+                            content_type='application/zip')
+
+    response['Content-Disposition'] = 'attachment; filename="%s.zip"' % repo_name
+    return response
