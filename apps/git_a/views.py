@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from apps.git_a.utils import *
+from apps.git_a.utils import get_repo_index, get_repo, get_commit
 
 
 def repo_index(request):
