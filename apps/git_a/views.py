@@ -1,6 +1,3 @@
-from os import walk, path
-from zipfile import ZipFile
-
 from pygments import highlight
 from pygments.lexers import guess_lexer_for_filename, DiffLexer
 from pygments.formatters import HtmlFormatter
@@ -10,7 +7,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from apps.git_a.utils import *
-from conf.settings.base import MEDIA_ROOT
 
 
 def repo_index(request):
