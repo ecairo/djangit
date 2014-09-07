@@ -19,3 +19,4 @@ build
 
 # PyCharm files:
 .idea/*
+media/*
