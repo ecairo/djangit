@@ -4,6 +4,18 @@ table.commit-metadata {
     font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
 }
 
+table.commit-metadata{
+	border-right: 1px solid #ddd;
+}
+
+table.commit-metadata tr {
+	border-bottom: 1px solid #ddd;
+}
+
+table.commit-metadata tr th{
+	vertical-align: middle;
+}
+
 .repo_nav{
 	padding-bottom: 20px;
 	padding-top: 20px;

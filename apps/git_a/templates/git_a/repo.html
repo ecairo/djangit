@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 
-{% load repositories i18n %}
+{% load repositories i18n markup %}
 
 {% block title %}
     {{ repo.working_dir|repo_name }}
 {% endblock %}
 
 {% block page_title %}
-    {% trans "Repository" %} {{ repo.working_dir|repo_name }} {% if repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
+    {% trans "Repository" %}: {{ repo.working_dir|repo_name }} {% if repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
 {% endblock %}
 
 {% block content %}
+    <div class="well">
+        <h3>{% trans "Status" %}:</h3>
+        <p>{{ repo.git.status|linebreaksbr }}</p>
+    </div>
 
     <section>
     <table class="table">
@@ -31,16 +35,21 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-random"></i>&nbsp;&nbsp;{{ repo.head }}  <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                     {% for head in repo.heads %}
-                        <li><a href="#tree_index" role="tab" data-toggle="tab">{{ head.name }}</a></li>
+                        <li><a href="#commits_log" role="tab" data-toggle="tab">{{ head.name }}</a></li>
                     {% endfor %}
                 </ul>
             </li>
-            <li><a href="#commits_log" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> {% trans "Commit log" %}</a></li>
+            <li><a href="#tree_index" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> {% trans "File Tree" %}</a></li>
         </ul>
     </section>
 
     <section class="tab-content">
-        <div class="tab-pane active"id="tree_index">
+        <div class="tab-pane active" id="commits_log">
+            {% for commit_log in commits %}
+            {% include 'git_a/commit_header.html' with commit=commit_log repo_name=repo.working_dir|repo_name %}
+            {% endfor %}
+        </div>
+        <div class="tab-pane" id="tree_index">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -65,11 +74,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
-        <div class="tab-pane" id="commits_log">
-            {% for commit_log in commits %}
-            {% include 'git_a/commit_header.html' with commit=commit_log repo_name=repo.working_dir|repo_name %}
-            {% endfor %}
         </div>
     </section>
 {% endblock %}

@@ -168,9 +168,19 @@ MIDDLEWARE_CLASSES = (
 ########## END MIDDLEWARE CONFIGURATION
 
 
+########## CONTEXT PROCESSORS CONFIGURATION
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+
+TEMPLATE_CONTEXT_PROCESSORS += (
+    'django.core.context_processors.request',
+    'apps.git_a.context_processors.repos_cp.get_repositories',
+)
+########## END CONTEXT PROCESSORS CONFIGURATION
+
+
 ########## URL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
-ROOT_URLCONF = '%s.urls' % SITE_NAME
+ROOT_URLCONF = 'conf.urls'
 ########## END URL CONFIGURATION
 
 

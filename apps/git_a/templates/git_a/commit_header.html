@@ -1,48 +1,48 @@
-{% load repositories staticfiles i18n %}
-{% load markup %}
+{% load repositories staticfiles i18n markup %}
 
 <script src="{% static 'js/vendor/holder.js' %}"></script>
 
-<div class="well well-lg">
+<div class="well well-sm">
     <div class="row-fluid">
-        <div class="col-sm-1">
-            <img data-src="holder.js/72x72" alt="django-avatar profile image">
-        </div>
-        <div class="col-sm-7">
-            <p>{{ commit.message|markdown:"safe" }}</p>
-            <p class="text-muted">{{ commit.committed_date|seconds_to_date|timesince }}</p>
-        </div>
-        <div class="col-sm-4">
-            <table class="commit-metadata">
+        <div class="col-sm-6">
+            <table class="table-condensed commit-metadata">
                 <tbody>
                     <tr>
-                        <td>{% trans "commit" %}: </td>
-                        <td>
-                            <a href="{% url 'commit_details' repo_name=repo_name commit_hash=commit.hexsha %}">{{ commit.hexsha|hex_sha_short }}</a>
-                        </td>
+                        <th rowspan="5">
+                            {# src="{{ commit.author.email|avatar }}" #}
+                            <img width="100px" height="100px" data-src="holder.js/100x100" alt="author gravatar">
+                        </th>
                     </tr>
                     <tr>
-                        <td>{% trans "tree" %}: </td>
-                        <td>
-                            <a href="{% url 'repository_navigate' repo_name=repo_name tree_hash=commit.tree.hexsha%}">{{ commit.tree.hexsha|hex_sha_short }}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "parent" %}: </td>
-                        <td>
-                            {% if commit.parents.0 %}
-                                <a href="{% url 'commit_details' repo_name=repo_name commit_hash=commit.parents.0.hexsha %}"> {{ commit.parents.0.hexsha|hex_sha_short }}</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "author" %}: </td>
-                        <td>
+                        <th>{% trans "author" %}: </th>
+                        <td>                            
                             <a href="mailto:{{ commit.author.email }}">{{ commit.author.name }}</a>
                         </td>
                     </tr>
+                    <tr>
+                        <th>{% trans "date" %}: </th>
+                        <td>{{ commit.committed_date|seconds_to_date|timesince }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "commit" %}: </th>
+                        <td>
+                            <a href="{% url 'commit_details' repo_name=repo_name commit_hash=commit.hexsha %}">{{ commit.hexsha }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "parent(s)" %}: </th>
+                        <td>
+                            {% for parent in commit.parents %}
+                                <a href="{% url 'commit_details' repo_name=repo_name commit_hash=parent.hexsha %}"> {{ parent.hexsha|hex_sha_short }}</a><span>&nbsp;</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
+        </div>
+        <div class="col-sm-6">
+            <p>{{ commit.message|markdown:"safe" }}</p>            
         </div>
     </div>
 </div>
