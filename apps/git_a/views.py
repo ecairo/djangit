@@ -70,18 +70,7 @@ def object_details(request, repo_name, object_hash):
 
 def archive_repo(request, repo_name):
     repo = get_repo(repo_name)
-
-    file_path = "%s.zip" % path.join(MEDIA_ROOT, repo_name)
-
-    # Zip whole project
-    zf = ZipFile(file_path, "w")
-    for dirname, subdirs, files in walk(repo.working_dir):
-        zf.write(dirname)
-        for file_name in files:
-            zf.write(path.join(dirname, file_name))
-    zf.close()
-
-    response = HttpResponse(open(file_path, 'r'),
-                            content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename="%s.zip"' % repo_name
-    return response
+    resp = HttpResponse(repo.git.archive('master', '--format=zip'),
+                        content_type='application/zip')
+    resp['Content-Disposition'] = 'attachment; filename="%s.zip"' % repo_name
+    return resp
