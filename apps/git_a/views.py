@@ -36,9 +36,20 @@ def repo_details(request, repo_name, tree_hash=None):
 
 
 def commit_details(request, repo_name, commit_hash):
+    repo = get_repo(repo_name)
+    commit = get_commit(repo, commit_hash)
+    diff_data = []
+    if commit.parents.count > 0:
+        commit_files = commit.diff(commit.parents[0])
+        for mfile in commit_files:
+            file_raw = repo.git.diff(mfile.a_blob, mfile.b_blob)
+            file_diff = highlight(file_raw, DiffLexer(), HtmlFormatter())
+            diff_data.append((mfile.a_blob.name, file_diff))
+
     return render_to_response('git_a/commit.html', {
-        'repo': get_repo(repo_name),
-        'commit': get_commit(repo_name, commit_hash)},
+        'repo': repo,
+        'commit': commit,
+        'diff_data': diff_data},
         context_instance=RequestContext(request))
 
 

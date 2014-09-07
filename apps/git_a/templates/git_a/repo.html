@@ -10,9 +10,9 @@
     {% trans "Repository" %}: {{ repo.working_dir|repo_name }} <sup class="{% if repo.is_dirty %}text-danger {% else %}text-success{% endif %}"><i class="glyphicon glyphicon-ok-sign"></i></sup>
 {% endblock %}
 
- {% block extra_css %}
+{% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/pygments.css' %}" type="text/css" />
- {% endblock extra_css %}
+{% endblock extra_css %}
 
 {% block content %}
     {% if repo.is_dirty %}

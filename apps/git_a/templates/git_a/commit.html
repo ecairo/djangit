@@ -11,24 +11,47 @@
     {% trans "Commit" %} : {{ commit|hex_sha_short }}
 {% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pygments.css' %}" type="text/css" />
+{% endblock extra_css %}
+
 {% block content %}
+    <script src="{% static 'js/vendor/holder.js' %}"></script>
+
     <div class="row-fuild">
         <div class="col-sm-4">
-            <p>{% trans "Author" %}: {{ commit.author.name }}</p>
-            <p>{% trans "Date" %}: {{ commit.committed_date|seconds_to_date|timesince }} ({{ commit.committed_date|seconds_to_date|date }})</p>
-            <p>{% trans "Files" %}:</p>
-            <ul>
-            {% for tree in commit.tree %}
-                <li>{{ tree.name }}</li>
-            {% endfor %}
-            </ul>
+            <p>
+                {# src="{{ commit.author.email|avatar }}" #}
+                <img width="100px" height="100px" data-src="holder.js/100x100" alt="author gravatar">
+                <a href="mailto:{{ commit.author.email }}">{{ commit.author.name }}</a>
+            </p>
+            <p><strong>{% trans "Date" %}: </strong>{{ commit.committed_date|seconds_to_date|date }} {% trans "at" %} {{ commit.committed_date|seconds_to_date|time:"TIME_FORMAT" }}</p>
         </div>
         <div class="col-sm-8">
-            <div class="panel panel-default">
-              <div class="panel-body">
+            <div class="well well-default">
                 <p>{{ commit.message|markdown:"safe" }}</p>
-              </div>
             </div>
+        </div>
+        <div class="col-sm-12">
+            <h4>{% trans "Files" %}:</h4>
+            <div class="panel-group" id="accordion">
+                {% for file_data in diff_data %}
+                  <div class="panel panel-danger">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
+                          {{ file_data.0 }}
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        {{ file_data.1|safe }}
+                      </div>
+                    </div>
+                  </div>                
+                {% endfor %}
+            </div>            
         </div>
     </div>
 {% endblock %}
