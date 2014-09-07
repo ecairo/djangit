@@ -61,6 +61,7 @@
                         <li class="{% if repo_list.working_tree_dir == repo.working_tree_dir %}active{% endif %}">
                           <a href="{% url 'repository_index' repo_list.working_tree_dir|repo_name %}">
                             {{ repo_list.working_tree_dir|repo_name }}
+                            {% if repo_list.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
                           </a>
                         </li>
                       {% endfor %}
