@@ -18,7 +18,7 @@ def hex_sha_short(value):
 
 @register.filter("seconds_to_date")
 def seconds_to_date(value):
-    t = time.gmtime(value)
+    t = time.localtime(value)
     return datetime(t.tm_year, t.tm_mon, t.tm_mday,
                     t.tm_hour, t.tm_min, t.tm_sec)
 
