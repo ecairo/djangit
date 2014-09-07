@@ -38,6 +38,8 @@
             {% endfor %}
         </div>
     </div>
+    {% else %}
+        {% include 'git_a/commit_header.html' with commit=repo.head.commit repo_name=repo.working_dir|repo_name %}
     {% endif %}
 
     <section>
