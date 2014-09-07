@@ -21,7 +21,8 @@ def repo_details(request, repo_name, tree_hash=None):
 
     return render_to_response('git_a/repo.html', {
         'repo': repo,
-        'tree_index': tree_index})
+        'tree_index': tree_index,
+        'commits': repo.iter_commits('master')})
 
 
 def commit_details(request, repo_name, commit_hash):
