@@ -16,6 +16,10 @@ table.commit-metadata tr th{
 	vertical-align: middle;
 }
 
+.commit_details{
+	cursor: pointer;
+}
+
 .repo_nav{
 	padding-bottom: 20px;
 	padding-top: 20px;

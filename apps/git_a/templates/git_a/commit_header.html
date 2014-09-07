@@ -21,7 +21,7 @@
                     </tr>
                     <tr>
                         <th>{% trans "date" %}: </th>
-                        <td>{{ commit.committed_date|seconds_to_date|timesince }}</td>
+                        <td>{{ commit.committed_date|seconds_to_date|date }} {% trans "at" %} {{ commit.committed_date|seconds_to_date|time }} <br> ({{ commit.committed_date|seconds_to_date|timesince }})</td>
                     </tr>
                     <tr>
                         <th>{% trans "commit" %}: </th>

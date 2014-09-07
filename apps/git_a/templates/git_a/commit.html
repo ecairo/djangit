@@ -19,21 +19,12 @@
     <script src="{% static 'js/vendor/holder.js' %}"></script>
 
     <div class="row-fuild">
-        <div class="col-sm-4">
-            <p>
-                {# src="{{ commit.author.email|avatar }}" #}
-                <img width="100px" height="100px" data-src="holder.js/100x100" alt="author gravatar">
-                <a href="mailto:{{ commit.author.email }}">{{ commit.author.name }}</a>
-            </p>
-            <p><strong>{% trans "Date" %}: </strong>{{ commit.committed_date|seconds_to_date|date }} {% trans "at" %} {{ commit.committed_date|seconds_to_date|time:"TIME_FORMAT" }}</p>
-        </div>
-        <div class="col-sm-8">
-            <div class="well well-default">
-                <p>{{ commit.message|markdown:"safe" }}</p>
-            </div>
+        <div class="col-sm-12">
+            {% include 'git_a/commit_header.html' with commit=commit repo_name=repo.working_dir|repo_name %}
         </div>
         <div class="col-sm-12">
             <h4>{% trans "Files" %}:</h4>
+            <h5>({% trans "A: parent --> B: selection" %})</h5>
             <div class="panel-group" id="accordion">
                 {% for file_data in diff_data %}
                   <div class="panel panel-danger">

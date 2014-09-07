@@ -1,5 +1,5 @@
 from pygments import highlight
-from pygments.lexers import guess_lexer_for_filename, DiffLexer
+from pygments.lexers import guess_lexer_for_filename, DiffLexer, TextLexer
 from pygments.formatters import HtmlFormatter
 
 from django.http import HttpResponse
@@ -39,12 +39,21 @@ def commit_details(request, repo_name, commit_hash):
     repo = get_repo(repo_name)
     commit = get_commit(repo, commit_hash)
     diff_data = []
-    if commit.parents.count > 0:
+    if len(commit.parents):
         commit_files = commit.diff(commit.parents[0])
         for mfile in commit_files:
             file_raw = repo.git.diff(mfile.a_blob, mfile.b_blob)
             file_diff = highlight(file_raw, DiffLexer(), HtmlFormatter())
             diff_data.append((mfile.a_blob.name, file_diff))
+    else:  # first commit
+        for cfile in commit.tree.blobs:
+            raw_data = cfile.data_stream.read()
+            try:
+                lexer = guess_lexer_for_filename(cfile.name, raw_data)
+            except Exception:
+                lexer = TextLexer()
+            file_diff = highlight(raw_data, lexer, HtmlFormatter())
+            diff_data.append((cfile.name, file_diff))
 
     return render_to_response('git_a/commit.html', {
         'repo': repo,
@@ -65,7 +74,10 @@ def object_details(request, repo_name, object_hash):
             break
 
     raw_data = selected_object.data_stream.read()
-    lexer = guess_lexer_for_filename(selected_object.name, raw_data)
+    try:
+        lexer = guess_lexer_for_filename(selected_object.name, raw_data)
+    except Exception:
+        lexer = TextLexer()
     object_data = highlight(raw_data, lexer, HtmlFormatter())
 
     return render_to_response('git_a/object_details.html', {

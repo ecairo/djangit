@@ -105,9 +105,36 @@
             </table>
         </div>
         <div class="tab-pane" id="commits_log">
-            {% for commit_log in commits %}
-            {% include 'git_a/commit_header.html' with commit=commit_log repo_name=repo.working_dir|repo_name %}
-            {% endfor %}
+            <table class="table table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{% trans "Summary" %}</th>
+                        <th>{% trans "Author" %}</th>
+                        <th>{% trans "Date" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for commit_log in commits %}
+                    <tr class="commit_details" data-target="{% url 'commit_details' repo_name=repo.working_dir|repo_name commit_hash=commit_log.hexsha %}">
+                        <td></td>
+                        <td>{{ commit_log.summary }}</td>
+                        <td>{{ commit_log.author }}</td>
+                        <td>{{ commit_log.committed_date|seconds_to_date|timesince }}</td>
+                    </tr>
+                    {% endfor %}                
+                </tbody>
+            </table>
         </div>
     </section>
 {% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function(){
+            $('.commit_details').click(function(){
+                window.location = $(this).data('target');
+            });
+        });
+    </script>
+{% endblock extra_js %}
