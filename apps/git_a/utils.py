@@ -1,7 +1,5 @@
 from os import listdir, path
-from git import Repo, InvalidGitRepositoryError, NoSuchPathError
-
-from django.http import Http404
+from git import Repo, InvalidGitRepositoryError
 
 
 def get_repos(repos_root):
@@ -28,17 +26,9 @@ def get_repo_or_none(repo_path):
         return None
 
 
-def get_repo(repo_path):
-    try:
-        return Repo(repo_path)
-    except InvalidGitRepositoryError:
-        raise Http404
-    except NoSuchPathError:
-        raise Http404
-
-
-def get_repo_index(repo, tree_hash):
+def get_repo_index(repo, tree_hash=None):
     """
+    Get all object in repository, or from specific tree
     """
     root_tree = repo.head.commit.tree
     selected_tree = root_tree

@@ -3,11 +3,11 @@
 {% load repositories staticfiles i18n markup %}
 
 {% block title %}
-    {{ repo.working_dir|repo_name }}
+    {{ repo.name }}
 {% endblock %}
 
 {% block page_title %}
-    {% trans "Repository" %}: {{ repo.working_dir|repo_name }} <sup class="{% if repo.is_dirty %}text-danger {% else %}text-success{% endif %}"><i class="glyphicon glyphicon-ok-sign"></i></sup>
+    {% trans "Repository" %}: {{ repo.name }} <sup class="{% if repo.repo.is_dirty %}text-danger {% else %}text-success{% endif %}"><i class="glyphicon glyphicon-ok-sign"></i></sup>
 {% endblock %}
 
 {% block extra_css %}
@@ -19,7 +19,7 @@
         <button type="button" class="close" data-dismiss="alert">
             <span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span>
         </button>
-    {% if repo.is_dirty %}
+    {% if repo.repo.is_dirty %}
         <h4>{% trans "Uncommited Changes" %}:</h4>
         <div class="panel-group" id="accordion">
             {% for file_data in diff_data %}
@@ -41,7 +41,7 @@
         </div>
     {% else %}
         <h4>{% trans "Last commit" %}:</h4>
-        {% include 'git_a/commit_header.html' with commit=repo.head.commit repo_name=repo.working_dir|repo_name %}
+        {% include 'git_a/commit_header.html' with commit=repo.repo.head.commit repo_name=repo.name %}
     {% endif %}
     </div>
 
@@ -96,10 +96,10 @@
                             <td style="color: #808080">
                                 {% if tree.type == 'blob' %}
                                     <span class="glyphicon glyphicon-file"></span>
-                                    <a href="{% url 'object_details' repo_name=repo.working_dir|repo_name object_hash=tree.hexsha %}">{{ tree.name }}</a>
+                                    <a href="{% url 'object_details' repo_name=repo.name object_hash=tree.hexsha %}">{{ tree.name }}</a>
                                 {% else %}
                                     <span class="glyphicon glyphicon-folder-close"></span>
-                                    <a href="{% url 'repository_navigate' repo_name=repo.working_dir|repo_name tree_hash=tree.hexsha %}">{{ tree.name }}</a>
+                                    <a href="{% url 'repository_navigate' repo_name=repo.name tree_hash=tree.hexsha %}">{{ tree.name }}</a>
                                 {% endif %}
                             </td>
                         </tr>
@@ -119,7 +119,7 @@
                 </thead>
                 <tbody>
                     {% for commit_log in commits %}
-                    <tr class="commit_details" data-target="{% url 'commit_details' repo_name=repo.working_dir|repo_name commit_hash=commit_log.hexsha %}">
+                    <tr class="commit_details" data-target="{% url 'commit_details' repo_name=repo.name commit_hash=commit_log.hexsha %}">
                         <td></td>
                         <td>{{ commit_log.summary }}</td>
                         <td>{{ commit_log.author }}</td>
