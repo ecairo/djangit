@@ -1,5 +1,6 @@
-from apps.git_a.utils import get_repos
+from apps.git_a.models import Repository
 
 
 def get_repositories(request):
-    return {'repos': get_repos()}
+    repos = [x for x in Repository.objects.all()]
+    return {'repos': repos}

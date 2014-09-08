@@ -9,11 +9,6 @@ from django.template import RequestContext
 from apps.git_a.utils import get_repo_index, get_repo, get_commit
 
 
-def repo_index(request):
-    return render_to_response('git_a/index.html',
-                              context_instance=RequestContext(request))
-
-
 def repo_details(request, repo_name, tree_hash=None):
     repo = get_repo(repo_name)
 

@@ -1,27 +1,34 @@
 from os import listdir, path
-from git import *
+from git import Repo, InvalidGitRepositoryError, NoSuchPathError
 
 from django.http import Http404
-from django.conf import settings
 
 
-def get_repos():
-    repos = [list_repos(repo_dir) for repo_dir in listdir(settings.REPOS_ROOT)]
-    return [r for r in repos if not (r is None)]
+def get_repos(repos_root):
+    """
+    Return a list with all valid git repositories
+    within `repos_root` path.
+    """
+    repos = []
+    for repo_dir in listdir(repos_root):
+        repo_path = path.join(repos_root, repo_dir)
+        if not path.isdir(repo_path):
+            continue
+
+        repo = get_repo_or_none(repo_path)
+        if repo:
+            repos.append(repo)
+    return repos
 
 
-def list_repos(name):
-    repo_path = path.join(settings.REPOS_ROOT, name)
-    if path.isdir(repo_path):
-        try:
-            return Repo(repo_path)
-        except InvalidGitRepositoryError:
-            return None
-    return None
+def get_repo_or_none(repo_path):
+    try:
+        return Repo(repo_path)
+    except InvalidGitRepositoryError:
+        return None
 
 
-def get_repo(name):
-    repo_path = path.join(settings.REPOS_ROOT, name)
+def get_repo(repo_path):
     try:
         return Repo(repo_path)
     except InvalidGitRepositoryError:

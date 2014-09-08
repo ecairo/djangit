@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, url
+from django.views.generic import TemplateView
 
-from apps.git_a.views import repo_index, repo_details, commit_details, object_details, archive_repo
+from apps.git_a.views import repo_details, commit_details,\
+    object_details, archive_repo
 
 urlpatterns = patterns(
     '',
@@ -19,6 +21,6 @@ urlpatterns = patterns(
     url(r'^(?P<repo_name>[\w_-]+)$',
         repo_details, name='repository_index'),
 
-    url(r'^$',
-        repo_index, name='repositories'),
+    url(r'^$', TemplateView.as_view(template_name='git_a/index.html'),
+        name='repositories'),
 )
