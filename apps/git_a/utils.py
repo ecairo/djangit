@@ -41,9 +41,21 @@ def get_repo_index(repo, tree_hash=None):
                 break
 
     tree_index = [x for x in selected_tree]
-    tree_index.sort()
+    tree_index.sort(cmp=compare_objects)
 
     return tree_index
+
+
+def compare_objects(x, y):
+    """
+    Comparer to sort the folders first than files.
+    """
+    if x.type == y.type == 'blob' or x.type == y.type == 'tree':
+        return cmp(x.name, y.name)
+
+    if x.type == 'blob':
+        return 1
+    return -1
 
 
 def get_commit(repo, commit_hash):
