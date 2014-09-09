@@ -43,6 +43,9 @@ class RepositoryView(DetailView):
 
 
 def commit_details(request, repo_name, commit_hash):
+    """
+    Get commit object details.
+    """
     repo = get_repo(repo_name)
     commit = get_commit(repo.git_repo, commit_hash)
     if not commit:
@@ -96,6 +99,10 @@ def object_details(request, repo_name, object_hash):
 
 
 def archive_repo(request, repo_name):
+    """
+    Return result from git command archive.
+    i.e.: `git archive master --format=zip > repo_name.zip`
+    """
     repo = get_repo(repo_name)
     resp = HttpResponse(repo.git_repo.git.archive('master', '--format=zip'),
                         content_type='application/zip')
@@ -104,6 +111,9 @@ def archive_repo(request, repo_name):
 
 
 def get_file(request, repo_name, file_hash):
+    """
+    Search a file from it hash and if exists return it attached
+    """
     repo = get_repo(repo_name)
     sel_file = get_object(repo, file_hash)
 
@@ -116,4 +126,7 @@ def get_file(request, repo_name, file_hash):
 
 
 def get_repo(repo_name):
+    """
+    Lookup for a Repository object in DB
+    """
     return get_object_or_404(Repository, name=repo_name)
