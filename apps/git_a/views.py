@@ -1,4 +1,4 @@
-import os
+# -*- coding: utf-8 -*-
 
 from pygments import highlight
 from pygments.lexers import guess_lexer_for_filename, DiffLexer, TextLexer

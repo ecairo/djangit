@@ -122,7 +122,7 @@
                     <tr class="commit_details" data-target="{% url 'commit_details' repo_name=repo.name commit_hash=commit_log.hexsha %}">
                         <td></td>
                         <td>{{ commit_log.summary }}</td>
-                        <td>{{ commit_log.author }}</td>
+                        <td>{{ commit_log.author.name }}</td>
                         <td>{{ commit_log.committed_date|seconds_to_date|timesince }}</td>
                     </tr>
                     {% endfor %}                
