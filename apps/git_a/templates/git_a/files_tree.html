@@ -18,7 +18,7 @@
             <td style="color: #808080">
                 {% if tree.type == 'blob' %}
                     <span class="glyphicon glyphicon-file"></span>
-                    <a href="javascript:" onclick="navigate(this)" data-target=="{% url 'object_details' repo_name=repo.name object_hash=tree.hexsha %}">{{ tree.name }}</a>
+                    <a href="{% url 'object_details' repo_name=repo.name object_hash=tree.hexsha %}">{{ tree.name }}</a>
                 {% else %}
                     <span class="glyphicon glyphicon-folder-close"></span>
                     <a href="javascript:" onclick="navigate(this)" data-target="{% url 'repository_navigate' repo_name=repo.name tree_hash=tree.hexsha %}">{{ tree.name }}</a>
