@@ -3,3 +3,4 @@ South>=0.8.1
 GitPython
 pygments>=1.2.2
 Markdown>=2.1
+django-gravatar2

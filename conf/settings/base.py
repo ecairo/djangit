@@ -207,6 +207,7 @@ THIRD_PARTY_APPS = (
     # Database migration helpers:
     'south',
     'pygments',
+    'django_gravatar',
 )
 
 # Apps specific for this project go here.

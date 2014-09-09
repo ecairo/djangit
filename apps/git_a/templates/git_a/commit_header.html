@@ -1,16 +1,13 @@
-{% load repositories staticfiles i18n markup %}
-
-<script src="{% static 'js/vendor/holder.js' %}"></script>
+{% load repositories staticfiles i18n markup gravatar %}
 
 <div class="well well-sm">
     <div class="row-fluid">
-        <div class="col-sm-6">
+        <div class="col-sm-7">
             <table class="table-condensed commit-metadata">
                 <tbody>
                     <tr>
                         <th rowspan="5">
-                            {# src="{{ commit.author.email|avatar }}" #}
-                            <img width="100px" height="100px" data-src="holder.js/100x100" alt="author gravatar">
+                            {% gravatar commit.author.email 150 %}
                         </th>
                     </tr>
                     <tr>
@@ -41,7 +38,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-5">
             <p>{{ commit.message|markdown:"safe" }}</p>            
         </div>
     </div>

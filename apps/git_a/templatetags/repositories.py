@@ -24,11 +24,6 @@ def seconds_to_date(value):
                     t.tm_hour, t.tm_min, t.tm_sec)
 
 
-@register.filter("avatar")
-def gravatar_avatar(value):
-    return 'http://www.gravatar.com/avatar/%s?s=100&d=404' % value
-
-
 @register.filter("normalize_size")
 def normalize_size(value):
     return normalize(int(value))
