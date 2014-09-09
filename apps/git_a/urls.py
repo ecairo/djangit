@@ -4,7 +4,7 @@ from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
 from apps.git_a.views import RepositoryView, commit_details,\
-    object_details, archive_repo, get_file
+    object_details, archive_repo, get_file, get_tree_index
 
 urlpatterns = patterns(
     '',
@@ -21,7 +21,7 @@ urlpatterns = patterns(
         get_file, name='file_download'),
 
     url(r'^(?P<repo_name>[\w_-]+)/(?P<tree_hash>[\w\d]+)/$',
-        RepositoryView.as_view(),
+        get_tree_index,
         name='repository_navigate'),
 
     url(r'^(?P<repo_name>[\w_-]+)$',

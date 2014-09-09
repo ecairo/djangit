@@ -1,0 +1,38 @@
+{% load repositories %}
+<tbody id="files_tree">
+    {% if tree_parent %}
+        <tr>
+            <td></td>
+            <td colspan="2">
+                <a href="javascript:" onclick="navigate(this)" data-target="{% url 'repository_navigate' repo_name=repo.name tree_hash=tree_parent %}">..</a>
+            </td>
+        </tr>
+    {% endif %}
+    {% for tree in tree_index %}
+        <tr>
+            <td>
+                {% if tree.type == 'blob' %}
+                    {{ tree.size|normalize_size }}
+                {% endif %}
+            </td>
+            <td style="color: #808080">
+                {% if tree.type == 'blob' %}
+                    <span class="glyphicon glyphicon-file"></span>
+                    <a href="javascript:" onclick="navigate(this)" data-target=="{% url 'object_details' repo_name=repo.name object_hash=tree.hexsha %}">{{ tree.name }}</a>
+                {% else %}
+                    <span class="glyphicon glyphicon-folder-close"></span>
+                    <a href="javascript:" onclick="navigate(this)" data-target="{% url 'repository_navigate' repo_name=repo.name tree_hash=tree.hexsha %}">{{ tree.name }}</a>
+                {% endif %}
+            </td>
+            <td>
+            {% if tree.type == 'blob' %}
+            {# TODO: Download zipped folder #}
+                <a href="{% url 'file_download' repo.name tree.hexsha %}">
+                    <span class="glyphicon glyphicon-cloud-download"></span>
+                </a>
+            {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+    

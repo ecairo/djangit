@@ -26,8 +26,8 @@ class RepositoryView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(RepositoryView, self).get_context_data(**kwargs)
         repo = context['repo'].git_repo
-        tree_hash = self.kwargs.get('tree_hash', None)
-        tree_index = get_repo_index(repo, tree_hash)
+
+        tree_index = get_repo_index(repo)
 
         diff_data = []
         if repo.is_dirty():  # TODO: Check error when changes are staged
@@ -40,6 +40,19 @@ class RepositoryView(DetailView):
         context['tree_index'] = tree_index
         context['commits'] = repo.iter_commits('master')
         return context
+
+
+def get_tree_index(request, repo_name, tree_hash):
+    """
+    Get file tree
+    """
+    repo = get_repo(repo_name)
+    tree_index = get_repo_index(repo.git_repo, tree_hash)
+    return render_to_response('git_a/files_tree.html', {
+        'repo': repo,
+        'tree_parent': tree_hash,
+        'tree_index': tree_index},
+        context_instance=RequestContext(request))
 
 
 def commit_details(request, repo_name, commit_hash):

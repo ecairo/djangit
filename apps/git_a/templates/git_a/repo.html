@@ -90,34 +90,7 @@
                         <th style="width: 60px"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for tree in tree_index %}
-                        <tr>
-                            <td>
-                                {% if tree.type == 'blob' %}
-                                    {{ tree.size|normalize_size }}
-                                {% endif %}
-                            </td>
-                            <td style="color: #808080">
-                                {% if tree.type == 'blob' %}
-                                    <span class="glyphicon glyphicon-file"></span>
-                                    <a href="{% url 'object_details' repo_name=repo.name object_hash=tree.hexsha %}">{{ tree.name }}</a>
-                                {% else %}
-                                    <span class="glyphicon glyphicon-folder-close"></span>
-                                    <a href="{% url 'repository_navigate' repo_name=repo.name tree_hash=tree.hexsha %}">{{ tree.name }}</a>
-                                {% endif %}
-                            </td>
-                            <td>
-                            {% if tree.type == 'blob' %}
-                            {# TODO: Download zipped folder #}
-                                <a href="{% url 'file_download' repo.name tree.hexsha %}">
-                                    <span class="glyphicon glyphicon-cloud-download"></span>
-                                </a>
-                            {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
+                {% include "git_a/files_tree.html" %}
             </table>
         </div>
         <div class="tab-pane" id="commits_log">
@@ -147,6 +120,12 @@
 
 {% block extra_js %}
     <script>
+        function navigate(sender){
+            $.get($(sender).data('target'), function(response){
+                $('#files_tree').replaceWith(response);
+            });
+        }
+
         $(document).ready(function(){
             $('.commit_details').click(function(){
                 window.location = $(this).data('target');
