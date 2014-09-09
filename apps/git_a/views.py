@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic import DetailView
 
-from .utils import get_repo_index, get_commit
+from .utils import get_repo_index, get_commit, get_object
 from .models import Repository
 
 
@@ -73,14 +73,13 @@ def commit_details(request, repo_name, commit_hash):
 
 def object_details(request, repo_name, object_hash):
     """
+    Get an object details
     """
     repo = get_repo(repo_name)
-    root_tree = repo.git_repo.head.commit.tree
-    selected_object = None
-    for blob_object in root_tree.list_traverse():
-        if blob_object.hexsha == object_hash:
-            selected_object = blob_object
-            break
+    selected_object = get_object(repo, object_hash)
+
+    if not selected_object:
+        raise Http404()
 
     raw_data = selected_object.data_stream.read()
     try:

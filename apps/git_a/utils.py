@@ -55,3 +55,18 @@ def get_commit(repo, commit_hash):
     except Exception:
         return None
     return commit
+
+
+def get_object(repo, object_hash):
+    """
+    Get an git object
+    """
+    root_tree = repo.git_repo.head.commit.tree
+    selected_object = None
+
+    for blob_object in root_tree.list_traverse():
+        if blob_object.hexsha == object_hash:
+            selected_object = blob_object
+            break
+
+    return selected_object
