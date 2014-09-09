@@ -87,6 +87,7 @@
                     <tr>
                         <th style="width: 60px">{% trans "Bytes" %}</th>
                         <th>{% trans "Name" %}</th>
+                        <th style="width: 60px"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -101,6 +102,14 @@
                                     <span class="glyphicon glyphicon-folder-close"></span>
                                     <a href="{% url 'repository_navigate' repo_name=repo.name tree_hash=tree.hexsha %}">{{ tree.name }}</a>
                                 {% endif %}
+                            </td>
+                            <td>
+                            {% if tree.type == 'blob' %}
+                            {# TODO: Download zipped folder #}
+                                <a href="{% url 'file_download' repo.name tree.hexsha %}">
+                                    <span class="glyphicon glyphicon-cloud-download"></span>
+                                </a>
+                            {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

@@ -103,5 +103,17 @@ def archive_repo(request, repo_name):
     return resp
 
 
+def get_file(request, repo_name, file_hash):
+    repo = get_repo(repo_name)
+    sel_file = get_object(repo, file_hash)
+
+    if not sel_file:
+        raise Http404()
+
+    resp = HttpResponse(sel_file.data_stream.read(), content_type='text/plain')
+    resp['Content-Disposition'] = 'attachment; filename="%s"' % sel_file.name
+    return resp
+
+
 def get_repo(repo_name):
     return get_object_or_404(Repository, name=repo_name)
