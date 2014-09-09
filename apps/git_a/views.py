@@ -30,7 +30,7 @@ class RepositoryView(DetailView):
         tree_index = get_repo_index(repo, tree_hash)
 
         diff_data = []
-        if repo.is_dirty():
+        if repo.is_dirty():  # TODO: Check error when changes are staged
             mod_files = repo.git.diff_files('--name-only').split('\n')
             for mfile in mod_files:
                 file_raw = repo.git.diff(mfile)

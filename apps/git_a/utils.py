@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import math
 from os import listdir, path
 from git import Repo, InvalidGitRepositoryError
 
@@ -56,6 +57,27 @@ def compare_objects(x, y):
     if x.type == 'blob':
         return 1
     return -1
+
+
+def normalize_size(size):
+    """
+    Normalize size dinamically (in bytes) to byte unit,
+    where unit = Bytes (default), KB, MB, GB
+    """
+    result = '%d B' % size
+    tmp = size / 1024.0
+    if tmp >= 1:
+        result = '%d KB' % math.ceil(tmp)
+
+    tmp = size / 1024.0 ** 2
+    if tmp >= 1:
+        result = '%d MB' % math.ceil(tmp)
+
+    tmp = size / 1024.0 ** 3
+    if tmp >= 1:
+        result = '%d GB' % math.ceil(tmp)
+
+    return result
 
 
 def get_commit(repo, commit_hash):

@@ -1,9 +1,10 @@
 import time
 import os
 from datetime import datetime
-
 from django import template
 register = template.Library()
+
+from ..utils import normalize_size as normalize
 
 
 @register.filter("repo_name")
@@ -26,3 +27,8 @@ def seconds_to_date(value):
 @register.filter("avatar")
 def gravatar_avatar(value):
     return 'http://www.gravatar.com/avatar/%s?s=100&d=404' % value
+
+
+@register.filter("normalize_size")
+def normalize_size(value):
+    return normalize(int(value))
