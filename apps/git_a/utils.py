@@ -46,6 +46,12 @@ def get_repo_index(repo, tree_hash=None):
     return tree_index
 
 
-def get_commit(repo, commit_name):
-    commit = repo.commit(commit_name)
+def get_commit(repo, commit_hash):
+    """
+    Get commit object from a repository and a commit hash
+    """
+    try:
+        commit = repo.commit(commit_hash)
+    except Exception:
+        return None
     return commit

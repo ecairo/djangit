@@ -4,7 +4,7 @@ from pygments import highlight
 from pygments.lexers import guess_lexer_for_filename, DiffLexer, TextLexer
 from pygments.formatters import HtmlFormatter
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic import DetailView
@@ -45,6 +45,8 @@ class RepositoryView(DetailView):
 def commit_details(request, repo_name, commit_hash):
     repo = get_repo(repo_name)
     commit = get_commit(repo.git_repo, commit_hash)
+    if not commit:
+        raise Http404()
     diff_data = []
     parents = commit.parents
 
