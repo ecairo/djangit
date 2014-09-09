@@ -25,7 +25,7 @@ class RepositoryView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(RepositoryView, self).get_context_data(**kwargs)
-        repo = context['repo'].repo
+        repo = context['repo'].git_repo
         tree_hash = self.kwargs.get('tree_hash', None)
         tree_index = get_repo_index(repo, tree_hash)
 
@@ -44,7 +44,7 @@ class RepositoryView(DetailView):
 
 def commit_details(request, repo_name, commit_hash):
     repo = get_repo(repo_name)
-    commit = get_commit(repo, commit_hash)
+    commit = get_commit(repo.git_repo, commit_hash)
     diff_data = []
     parents = commit.parents
 
@@ -58,7 +58,7 @@ def commit_details(request, repo_name, commit_hash):
         if not mfile.a_mode or not mfile.b_mode:
             continue
 
-        file_raw = repo.git.diff(a_file, b_file)
+        file_raw = repo.git_repo.git.diff(a_file, b_file)
         file_diff = highlight(file_raw, DiffLexer(), HtmlFormatter())
         diff_data.append((mfile.a_blob.name, file_diff))
 
@@ -73,7 +73,7 @@ def object_details(request, repo_name, object_hash):
     """
     """
     repo = get_repo(repo_name)
-    root_tree = repo.head.commit.tree
+    root_tree = repo.git_repo.head.commit.tree
     selected_object = None
     for blob_object in root_tree.list_traverse():
         if blob_object.hexsha == object_hash:
@@ -96,11 +96,11 @@ def object_details(request, repo_name, object_hash):
 
 def archive_repo(request, repo_name):
     repo = get_repo(repo_name)
-    resp = HttpResponse(repo.git.archive('master', '--format=zip'),
+    resp = HttpResponse(repo.git_repo.git.archive('master', '--format=zip'),
                         content_type='application/zip')
     resp['Content-Disposition'] = 'attachment; filename="%s.zip"' % repo_name
     return resp
 
 
 def get_repo(repo_name):
-    return get_object_or_404(Repository, name=repo_name).repo
+    return get_object_or_404(Repository, name=repo_name)

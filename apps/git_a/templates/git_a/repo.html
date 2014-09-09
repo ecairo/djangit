@@ -19,7 +19,7 @@
         <button type="button" class="close" data-dismiss="alert">
             <span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span>
         </button>
-    {% if repo.repo.is_dirty %}
+    {% if repo.git_repo.is_dirty %}
         <h4>{% trans "Uncommited Changes" %}:</h4>
         <div class="panel-group" id="accordion">
             {% for file_data in diff_data %}
@@ -41,7 +41,7 @@
         </div>
     {% else %}
         <h4>{% trans "Last commit" %}:</h4>
-        {% include 'git_a/commit_header.html' with commit=repo.repo.head.commit repo_name=repo.name %}
+        {% include 'git_a/commit_header.html' with commit=repo.git_repo.head.commit repo_name=repo.name %}
     {% endif %}
     </div>
 
@@ -71,7 +71,7 @@
                 </a>
                 {# TODO: Show commits by branch #}
                 {# <ul class="dropdown-menu" role="menu"> #}
-                    {# {% for head in repo.heads %} #}
+                    {# {% for head in repo.git_repo.heads %} #}
                         {# <li><a href="#commits_log" role="tab" data-toggle="tab">{{ head.name }}</a></li> #}
                     {# {% endfor %} #}
                 {# </ul> #}

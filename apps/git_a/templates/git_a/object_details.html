@@ -3,11 +3,11 @@
 {% load repositories staticfiles i18n %}
 
 {% block title %}
-    {{ repo.working_dir|repo_name }} : {{ selected_object.name }}
+    {{ repo.name }} : {{ selected_object.name }}
 {% endblock %}
 
 {% block page_title %}
-    {% trans "Repository" %} {{ repo.working_dir|repo_name }}
+    {% trans "Repository" %} {{ repo.name }}
 {% endblock %}
 
  {% block extra_css %}

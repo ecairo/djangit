@@ -4,7 +4,7 @@
 {% load markup %}
 
 {% block title %}
-    {{ repo.working_dir|repo_name }} : {{ commit|hex_sha_short }}
+    {{ repo.name }} : {{ commit|hex_sha_short }}
 {% endblock %}
 
 {% block page_title %}
@@ -20,7 +20,7 @@
 
     <div class="row-fuild">
         <div class="col-sm-12">
-            {% include 'git_a/commit_header.html' with commit=commit repo_name=repo.working_dir|repo_name %}
+            {% include 'git_a/commit_header.html' with commit=commit repo_name=repo.name %}
         </div>
         <div class="col-sm-12">
             <h4>{% trans "Files" %}:</h4>

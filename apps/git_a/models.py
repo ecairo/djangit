@@ -46,5 +46,5 @@ class Repository(models.Model):
         return u'%s' % self.name
 
     @property
-    def repo(self):
+    def git_repo(self):
         return get_repo_or_none(self.path)

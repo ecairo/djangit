@@ -25,11 +25,11 @@
             <td>
                 <a href="{% url 'repository_index' repo.name %}">
                     {{ repo.name }}
-                </a> {% if repo.repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
+                </a> {% if repo.git_repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
             </td>
-            <td>{{ repo.repo.head.commit.summary }}</td>
-            <td>{{ repo.repo.head.commit.author.name }}</td>
-            <td>{{ repo.repo.head.commit.committed_date|seconds_to_date|timesince }}</td>
+            <td>{{ repo.git_repo.head.commit.summary }}</td>
+            <td>{{ repo.git_repo.head.commit.author.name }}</td>
+            <td>{{ repo.git_repo.head.commit.committed_date|seconds_to_date|timesince }}</td>
             <td><a href="{% url 'repository_archive' repo.name %}"><span class="glyphicon glyphicon-cloud-download"></span></a></td>
         </tr>
         {% endfor %}

@@ -61,7 +61,7 @@
                         <li class="{% if repo_list.pk == repo.pk %}active{% endif %}">
                           <a href="{% url 'repository_index' repo_list.name %}">
                             {{ repo_list.name }}
-                            {% if repo_list.repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
+                            {% if repo_list.git_repo.is_dirty %}<sup class="text-danger">{% trans "dirty" %}</sup>{% endif %}
                           </a>
                         </li>
                       {% endfor %}
