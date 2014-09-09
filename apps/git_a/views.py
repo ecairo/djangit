@@ -58,7 +58,7 @@ def commit_details(request, repo_name, commit_hash):
         if not mfile.a_mode or not mfile.b_mode:
             continue
 
-        file_raw = repo.git_repo.git.diff(a_file, b_file)
+        file_raw = repo.git_repo.git.diff(b_file, a_file)
         file_diff = highlight(file_raw, DiffLexer(), HtmlFormatter())
         diff_data.append((mfile.a_blob.name, file_diff))
 
