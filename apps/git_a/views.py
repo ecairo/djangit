@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import StringIO
 from pygments import highlight
 from pygments.lexers import guess_lexer_for_filename, DiffLexer, TextLexer
 from pygments.formatters import HtmlFormatter
@@ -117,9 +118,11 @@ def archive_repo(request, repo_name):
     i.e.: `git archive master --format=zip > repo_name.zip`
     """
     repo = get_repo(repo_name)
-    resp = HttpResponse(repo.git_repo.git.archive('master', '--format=zip'),
-                        content_type='application/zip')
-    resp['Content-Disposition'] = 'attachment; filename="%s.zip"' % repo_name
+    repo_filename = '%s.zip' % repo_name
+    s = StringIO.StringIO()
+    repo.git_repo.archive(s, format='zip')
+    resp = HttpResponse(s.getvalue(), content_type='application/zip')
+    resp['Content-Disposition'] = 'attachment; filename="%s"' % repo_filename
     return resp
 
 

@@ -66,5 +66,3 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TEMPLATE_CONTEXT': True,
 }
 ########## END TOOLBAR CONFIGURATION
-
-REPOS_ROOT = 'D:/funcode/django'
