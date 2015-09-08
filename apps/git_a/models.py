@@ -24,7 +24,8 @@ class ReposRoot(models.Model):
         for repo in repos:
             new_repo = Repository()
             new_repo.path = repo.working_dir
-            new_repo.name = repo.working_dir.split(os.sep)[-1]
+            # TODO: fix this patch to skip names with "."
+            new_repo.name = repo.working_dir.split(os.sep)[-1].split('.')[0]
             new_repo.save()
 
     def __unicode__(self):
